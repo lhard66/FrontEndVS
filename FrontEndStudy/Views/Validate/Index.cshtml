@@ -1,0 +1,114 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>表单验证</title>
+    <style>
+        /*.error {
+            color: red;
+        }*/
+
+        /*文本框变红*/
+        input.error {
+            border: 1px solid red;
+        }
+        /*注意：点(.)两边不能有空格*/
+        label.error {
+            background: url("/Images/error.png") no-repeat 0px 0px;
+            padding-left: 16px;
+            padding-bottom: 2px;
+            font-weight: bold;
+            color: #EA5200;
+        }
+
+        /*label.checked {
+            background: url("/Images/error.png") no-repeat 0px 0px;
+        }*/
+    </style>
+</head>
+<body>
+    <div>
+        <form action="/Validate/DoPost" method="post" id="commentForm">
+            <fieldset>
+                <legend>用户表单</legend>
+                <p>
+                    <label for="cname">Name(必需，最小3个字母)：</label>
+                    <input type="text" id="cname" name="name" minlength="3" required />
+                </p>
+                <p>
+                    <label for="pwd">Password(必需)：</label>
+                    <input type="text" id="pwd" name="pwd" required />
+                </p>
+                <p>
+                    <input type="submit" value="提交" />
+                    <button type="button" id="reset">重置</button>
+                </p>
+            </fieldset>
+        </form>
+    </div>
+    <script src="~/Scripts/jquery-3.1.0.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/messages_zh.js"></script>
+    <script>
+        //$.validator.setDefaults({
+        //    submitHandler: function () {
+        //        alert('aaa');
+        //    }
+        //});
+        //$.validator.setDefaults({
+        //    submitHandler: function () {
+        //        //alert('提交事件!');
+        //        //不写此句，表单不会提交
+        //        form.submit();
+        //    }
+        //});
+
+        $(function () {
+            //$('#commentForm').validate({
+            //    submitHandler: function (form) {
+            //        //只验证，不提交
+            //        //debug: true;
+            //    }
+            //});
+            //------------------------------------------
+            //$('#commentForm').validate({
+            //    //element是对应text的JQuery对象
+            //    //error是错误信息
+            //    errorPlacement: function (error, element) {
+            //        //alert(element.attr('id'));
+            //        //alert(error);
+            //        //如果只注释下行，不去除此函数，则默认函数会被此函数替换，造成不显示错误信息
+            //        //$(element).closest('form').find('label[for=' + element.attr('id') + ']').append(error);
+            //        //console.log(element.val());
+            //    }
+            //});
+            //------------------------------------------
+
+            var validator = $("#commentForm").validate({
+                submitHandler: function (form) {
+                    //alert("submitted");
+                    form.submit();
+                },
+                remote: {
+                    url: 'CanLogin',
+                    type: 'post',
+                    data: {
+                        name: function () {
+                            return $('#name').val();
+                        },
+                        pwd: function () {
+                            return $('#pwd').val();
+                        }
+                    }
+                }
+            });
+
+        });
+    </script>
+</body>
+</html>
